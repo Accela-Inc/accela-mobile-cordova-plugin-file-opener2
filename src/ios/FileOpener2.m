@@ -41,16 +41,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	CDVViewController* cont = (CDVViewController*)[super viewController];
 	self.cdvViewController = cont;
-	NSString *uti = nil;
-
-	if([contentType length] == 0){
-		NSArray *dotParts = [path componentsSeparatedByString:@"."];
-		NSString *fileExt = [dotParts lastObject];
-
-		uti = (__bridge NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)fileExt, NULL);
-	} else {
-		uti = (__bridge NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge CFStringRef)contentType, NULL);
-	}
 
 	dispatch_async(dispatch_get_main_queue(), ^{
 		NSURL *fileURL = [NSURL URLWithString:[path stringByRemovingPercentEncoding]];
@@ -69,7 +59,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 		docController = [UIDocumentInteractionController  interactionControllerWithURL:fileURL];
 		docController.delegate = self;
-		docController.UTI = uti;
 
 		CDVPluginResult* pluginResult = nil;
 
